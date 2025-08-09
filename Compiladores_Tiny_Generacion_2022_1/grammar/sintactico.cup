@@ -237,8 +237,8 @@ var_declaration ::= VAR ID:var SEMI
 ;
 
 // Secuencia de sentencias
-stmt_seq ::= stmt_seq:seq SEMI stmt:sent
-            {: if(debug) System.out.println("\t secuencia sentencias"); 
+stmt_seq ::= stmt_seq:seq stmt:sent
+            {: if(debug) System.out.println("\t secuencia sentencias sin punto y coma"); 
                NodoBase current = seq;
                if(current != null){
                    while(current.TieneHermano()){
@@ -250,8 +250,8 @@ stmt_seq ::= stmt_seq:seq SEMI stmt:sent
                    RESULT = sent;
                }
             :}
-          | stmt_seq:seq stmt:sent
-            {: if(debug) System.out.println("\t secuencia sentencias sin punto y coma"); 
+          | stmt_seq:seq SEMI stmt:sent
+            {: if(debug) System.out.println("\t secuencia sentencias"); 
                NodoBase current = seq;
                if(current != null){
                    while(current.TieneHermano()){
@@ -407,7 +407,7 @@ logical_exp ::= logical_exp:left OR relational_exp:right
                {: if(debug) System.out.println("\t operacion AND"); 
                   RESULT = new NodoOperacion(left, tipoOp.and, right);
                :}
-             | NOT relational_exp:expr
+             | NOT factor:expr
                {: if(debug) System.out.println("\t operacion NOT"); 
                   RESULT = new NodoOperacion(null, tipoOp.not, expr);
                :}

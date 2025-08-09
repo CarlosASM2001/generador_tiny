@@ -1,0 +1,48 @@
+// Programa de prueba gradual
+global x;
+global arr : array[10];
+
+function suma_vector(v : array[], size)
+begin
+    var i;
+    var total;
+    total := 0;
+    return total
+end
+
+begin
+    var i;
+    var num;
+    var resultado;
+    
+    write "Ingrese un número: ";
+    read num;
+    
+    if num >= 0 && num <= 10 then
+    begin
+        write "El número está en rango";
+        write num;
+        
+        if num % 2 = 0 then
+            write "El número es par"
+        else
+            write "El número es impar"
+        end;
+        
+        x := num ** 2;
+        write "El cuadrado es: ";
+        write x
+    end
+    else
+    begin
+        write "Número fuera de rango"
+    end;
+    
+    resultado := call suma_vector(arr, 10);
+    write "La suma del vector es: ";
+    write resultado;
+    
+    if !(num != 5) then
+        write "El número es 5"
+    end
+end

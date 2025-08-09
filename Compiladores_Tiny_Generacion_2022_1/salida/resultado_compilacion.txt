@@ -33,19 +33,20 @@ token VAR
 token ID
 token SEMI
 token VAR
-	 declaracion variable local
-	 sentencia unica
+Syntax error
+instead expected token classes are []
 token ID
 token SEMI
 token ID
-	 declaracion variable local
-	 secuencia sentencias sin punto y coma
 token ASSIGN
 token NUM
+	 error en sentencia
+Error sintáctico en sentencia
+	 sentencia unica
 token SEMI
 	 numero entero
 	 asignacion variable
-	 secuencia sentencias sin punto y coma
+	 secuencia sentencias
 token FOR
 token ID
 token ASSIGN
@@ -129,27 +130,28 @@ token VAR
 token ID
 token SEMI
 token VAR
-	 declaracion variable local
-	 sentencia unica
+Syntax error
+instead expected token classes are [END, SEMI]
 token ID
 token SEMI
 token VAR
-	 declaracion variable local
-	 secuencia sentencias sin punto y coma
 token ID
 token SEMI
+	 error en sentencia
+Error sintáctico en sentencia
+	 sentencia unica
 token COMENTARIO_LINEA
 token WRITE
-	 declaracion variable local
-	 secuencia sentencias sin punto y coma
+Syntax error
+instead expected token classes are [END, SEMI]
 token STRING
 token SEMI
-	 cadena texto
-	 write expresion
-	 secuencia sentencias sin punto y coma
 token READ
 token ID
 token SEMI
+	 error en sentencia
+Error sintáctico en sentencia
+	 secuencia sentencias
 	 read variable
 	 secuencia sentencias
 token COMENTARIO_LINEA
@@ -282,7 +284,7 @@ token END
 token SEMI
 	 bloque begin-end
 Syntax error
-instead expected token classes are []
+instead expected token classes are [END]
 token COMENTARIO_LINEA
 token ID
 token ASSIGN

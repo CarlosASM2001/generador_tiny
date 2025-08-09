@@ -1,0 +1,8 @@
+// Programa de prueba para el operador NOT
+begin
+    var num;
+    num := 5;
+    if !(num != 5) then
+        write "El número es 5"
+    end
+end
