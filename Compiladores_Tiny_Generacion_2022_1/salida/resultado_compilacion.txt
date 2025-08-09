@@ -19,313 +19,127 @@ token FUNCTION
 	 secuencia declaraciones
 token ID
 token LPAREN
-token ID
 token RPAREN
 token BEGIN
-token VAR
-token ID
-token SEMI
-token IF
-Syntax error
-instead expected token classes are []
-token ID
-token LE
-token NUM
-token THEN
-token ID
-token ASSIGN
-token NUM
-token ELSE
-token ID
-token ASSIGN
-token ID
-token TIMES
-token CALL
-token ID
-token LPAREN
-token ID
-token MINUS
-token NUM
-token RPAREN
-token END
-token SEMI
 token RETURN
-token ID
+token NUM
 token END
-	 error en sentencia
-Error sintáctico en sentencia
-	 sentencia unica
-	 identificador
+	 numero entero
 	 return con valor
-	 secuencia sentencias
+	 sentencia unica
 token COMENTARIO_LINEA
 token FUNCTION
-	 declaracion funcion con parametros
+	 declaracion funcion sin parametros
 	 secuencia declaraciones
 token ID
 token LPAREN
 token ID
-token COLON
-token ARRAY
-token LBRACKET
-token RBRACKET
-token COMMA
-token ID
 token RPAREN
-	 lista parametros
 token BEGIN
-token VAR
-token ID
-token SEMI
-token VAR
-Syntax error
-instead expected token classes are [END, SEMI]
-token ID
-token SEMI
-token ID
-token ASSIGN
-token NUM
-	 error en sentencia
-Error sintáctico en sentencia
-	 sentencia unica
-token SEMI
-	 numero entero
-	 asignacion variable
-	 secuencia sentencias
-token FOR
-token ID
-token ASSIGN
-token NUM
-token TO
-	 numero entero
-token ID
-token MINUS
-	 identificador
-token NUM
-token STEP
-	 numero entero
-	 resta
-token NUM
-token BEGIN
-	 numero entero
-token ID
-token ASSIGN
-token ID
-token PLUS
-	 identificador
-token ID
-token LBRACKET
-token ID
-token RBRACKET
-	 identificador
-token SEMI
-	 acceso array
-	 suma
-	 asignacion variable
-	 sentencia unica
-token IF
-token ID
-token LBRACKET
-token ID
-token RBRACKET
-	 identificador
-token LT
-	 acceso array
-token NUM
-token THEN
-	 numero entero
-	 operacion menor
-token CONTINUE
-token END
-	 continue
-	 sentencia unica
-token SEMI
-	 if simple
-	 secuencia sentencias
-token IF
-token ID
-token GT
-	 identificador
-token NUM
-token THEN
-	 numero entero
-	 operacion mayor
-token BREAK
-token END
-	 break
-	 sentencia unica
-token END
-	 if simple
-	 secuencia sentencias
-token SEMI
-	 for con step
-	 secuencia sentencias
 token RETURN
 token ID
-token END
-	 identificador
-	 return con valor
-	 secuencia sentencias
-token COMENTARIO_LINEA
-token BEGIN
-	 declaracion funcion con parametros
-	 secuencia declaraciones
-token VAR
-token ID
-token SEMI
-token VAR
-Syntax error
-instead expected token classes are [END, SEMI]
-token ID
-token SEMI
-token VAR
-token ID
-token SEMI
-	 error en sentencia
-Error sintáctico en sentencia
-	 sentencia unica
-token COMENTARIO_LINEA
-token WRITE
-Syntax error
-instead expected token classes are [END, SEMI]
-token STRING
-token SEMI
-token READ
-token ID
-token SEMI
-	 error en sentencia
-Error sintáctico en sentencia
-	 secuencia sentencias
-	 read variable
-	 secuencia sentencias
-token COMENTARIO_LINEA
-token FOR
-token ID
-token ASSIGN
-token NUM
-token TO
-	 numero entero
-token NUM
-token STEP
-	 numero entero
-token NUM
-token BEGIN
-	 numero entero
-token ID
-token LBRACKET
-token ID
-token RBRACKET
-	 identificador
-token ASSIGN
-token ID
-token TIMES
-	 identificador
-token NUM
 token PLUS
-	 numero entero
-	 multiplicacion
+	 identificador
 token NUM
 token END
 	 numero entero
 	 suma
-	 asignacion array
+	 return con valor
 	 sentencia unica
-token SEMI
-	 for con step
-	 secuencia sentencias
 token COMENTARIO_LINEA
-token IF
-token ID
-token GE
-	 identificador
-token NUM
-token AND
-	 numero entero
-	 operacion mayor igual
-token ID
-token LE
-	 identificador
-token NUM
-token THEN
-	 numero entero
-	 operacion menor igual
-	 operacion AND
 token BEGIN
-Syntax error
-instead expected token classes are [error, IF, REPEAT, READ, WRITE, RETURN, CALL, VAR, FOR, BREAK, CONTINUE, ID]
+	 declaracion funcion con parametros
+	 secuencia declaraciones
+token ID
+token ASSIGN
+token NUM
+token SEMI
+	 numero entero
+	 asignacion variable
+	 sentencia unica
+token ID
+token LBRACKET
+token NUM
+token RBRACKET
+	 numero entero
+token ASSIGN
+token NUM
+token SEMI
+	 numero entero
+	 asignacion array
+	 secuencia sentencias
+token ID
+token LBRACKET
+token NUM
+token RBRACKET
+	 numero entero
+token ASSIGN
+token NUM
+token SEMI
+	 numero entero
+	 asignacion array
+	 secuencia sentencias
+token ID
+token LBRACKET
+token NUM
+token RBRACKET
+	 numero entero
+token ASSIGN
+token NUM
+token SEMI
+	 numero entero
+	 asignacion array
+	 secuencia sentencias
+token WRITE
+token STRING
+token SEMI
+	 cadena texto
+	 write expresion
+	 secuencia sentencias
+token WRITE
+token ID
+token SEMI
+	 identificador
+	 write expresion
+	 secuencia sentencias
+token WRITE
+token ID
+token LBRACKET
+token NUM
+token RBRACKET
+	 numero entero
+token SEMI
+	 acceso array
+	 write expresion
+	 secuencia sentencias
+token WRITE
+token ID
+token LBRACKET
+token NUM
+token RBRACKET
+	 numero entero
+token SEMI
+	 acceso array
+	 write expresion
+	 secuencia sentencias
+token WRITE
+token ID
+token LBRACKET
+token NUM
+token RBRACKET
+	 numero entero
+token SEMI
+	 acceso array
+	 write expresion
+	 secuencia sentencias
 token ID
 token ASSIGN
 token CALL
 token ID
 token LPAREN
-token ID
 token RPAREN
 token SEMI
-token WRITE
-token STRING
-token SEMI
-	 error en sentencia
-Error sintáctico en sentencia
-	 sentencia unica
-	 cadena texto
-	 write expresion
-	 secuencia sentencias
-token WRITE
-token ID
-token SEMI
-	 identificador
-	 write expresion
-	 secuencia sentencias
-token WRITE
-token STRING
-token SEMI
-	 cadena texto
-	 write expresion
-	 secuencia sentencias
-token WRITE
-token ID
-token SEMI
-	 identificador
-	 write expresion
-	 secuencia sentencias
-token COMENTARIO_LINEA
-token IF
-token ID
-token MOD
-	 identificador
-token NUM
-token EQ
-	 numero entero
-	 modulo
-token NUM
-token THEN
-	 numero entero
-	 operacion igual
-token WRITE
-token STRING
-token ELSE
-	 cadena texto
-	 write expresion
-	 sentencia unica
-token WRITE
-token STRING
-token END
-	 cadena texto
-	 write expresion
-	 sentencia unica
-token SEMI
-	 if-else
-	 secuencia sentencias
-token COMENTARIO_LINEA
-token ID
-token ASSIGN
-token ID
-token POW
-	 identificador
-token NUM
-token SEMI
-	 numero entero
-	 potencia
+	 llamada funcion sin args en expresion
 	 asignacion variable
 	 secuencia sentencias
 token WRITE
@@ -336,36 +150,18 @@ token SEMI
 	 secuencia sentencias
 token WRITE
 token ID
-token END
+token SEMI
 	 identificador
 	 write expresion
 	 secuencia sentencias
-token ELSE
-	 if simple
-	 secuencia sentencias
-Syntax error
-instead expected token classes are [END, SEMI]
-token BEGIN
-token WRITE
-token STRING
-token END
-token SEMI
-token COMENTARIO_LINEA
 token ID
 token ASSIGN
 token CALL
-	 error en sentencia
-Error sintáctico en sentencia
-	 sentencia unica
 token ID
 token LPAREN
-token ID
-token COMMA
-	 identificador
 token NUM
 token RPAREN
 	 numero entero
-	 lista argumentos
 token SEMI
 	 llamada funcion en expresion
 	 asignacion variable
@@ -378,63 +174,9 @@ token SEMI
 	 secuencia sentencias
 token WRITE
 token ID
-token SEMI
+token END
 	 identificador
 	 write expresion
-	 secuencia sentencias
-token COMENTARIO_LINEA
-token IF
-token LPAREN
-token ID
-token GT
-	 identificador
-token NUM
-token RPAREN
-	 numero entero
-	 operacion mayor
-token OR
-	 expresion parentesis
-token LPAREN
-token ID
-token LT
-	 identificador
-token NUM
-token RPAREN
-	 numero entero
-	 operacion menor
-token THEN
-	 expresion parentesis
-	 operacion OR
-token WRITE
-token STRING
-token END
-	 cadena texto
-	 write expresion
-	 sentencia unica
-token SEMI
-	 if simple
-	 secuencia sentencias
-token IF
-token NOT
-token LPAREN
-token ID
-token NE
-	 identificador
-token NUM
-token RPAREN
-	 numero entero
-	 operacion diferente
-token THEN
-	 expresion parentesis
-	 operacion NOT
-token WRITE
-token STRING
-token END
-	 cadena texto
-	 write expresion
-	 sentencia unica
-token END
-	 if simple
 	 secuencia sentencias
 	 programa principal
 	 regla programa completo
