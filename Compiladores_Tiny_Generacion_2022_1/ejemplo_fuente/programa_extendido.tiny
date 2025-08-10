@@ -60,6 +60,7 @@ begin
     else
     begin
         write "Número fuera de rango"
+    end
     end;
     
     // Prueba de la función suma_vector

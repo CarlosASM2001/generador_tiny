@@ -128,6 +128,9 @@ espacio		    = [ \t]+
 ":="            {	if(debug) System.out.println("token ASSIGN");
 			return sf.newSymbol("ASSIGN",sym.ASSIGN);
 			}
+"=="            {	if(debug) System.out.println("token EQ");
+			return sf.newSymbol("EQ",sym.EQ);
+			}
 "="             {	if(debug) System.out.println("token EQ");
 			return sf.newSymbol("EQ",sym.EQ);
 			}
@@ -232,8 +235,8 @@ espacio		    = [ \t]+
 {espacio}    { /* saltos espacios en blanco*/}
 
 /* COMENTARIOS MEJORADOS */
-"{"[^}]*"}"  { /* comentarios de bloque */ if(debug) System.out.println("token COMENTARIO"); }
-"//"[^\n]*   { /* comentarios de línea */ if(debug) System.out.println("token COMENTARIO_LINEA"); }
+"{"[^}]*"}"  { /* comentarios de bloque - se ignoran */ }
+"//"[^\n]*   { /* comentarios de línea - se ignoran */ }
 
 /* CARACTERES ILEGALES */
 .               {System.err.println("Caracter Ilegal encontrado en analisis lexico: " + yytext() + " en línea " + lineanum + "\n");}

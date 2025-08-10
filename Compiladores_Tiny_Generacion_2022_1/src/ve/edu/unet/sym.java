@@ -5,8 +5,8 @@
 
 package ve.edu.unet;
 
-/** CUP generated class containing symbol constants. */
-public class sym {
+/** CUP generated interface containing symbol constants. */
+public interface sym {
   /* terminals */
   public static final int POW = 34;
   public static final int FUNCTION = 10;
