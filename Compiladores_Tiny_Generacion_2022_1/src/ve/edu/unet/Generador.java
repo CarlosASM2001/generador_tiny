@@ -45,6 +45,15 @@ public class Generador {
 	}
 	
 	public static void generarCodigoObjeto(NodoBase raiz){
+		generarCodigoObjeto(raiz, null);
+	}
+	
+	public static void generarCodigoObjeto(NodoBase raiz, String archivoSalida){
+		// Configurar archivo de salida si se especifica
+		if (archivoSalida != null && !archivoSalida.isEmpty()) {
+			UtGen.configurarArchivoSalida(archivoSalida);
+		}
+		
 		System.out.println();
 		System.out.println();
 		System.out.println("------ CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------");
@@ -58,6 +67,12 @@ public class Generador {
 		System.out.println();
 		System.out.println();
 		System.out.println("------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------");
+		
+		// Cerrar archivo de salida si se configuró
+		if (archivoSalida != null && !archivoSalida.isEmpty()) {
+			UtGen.cerrarArchivoSalida();
+			System.out.println("Código objeto generado en: " + archivoSalida);
+		}
 	}
 	
 	//Funcion principal de generacion de codigo

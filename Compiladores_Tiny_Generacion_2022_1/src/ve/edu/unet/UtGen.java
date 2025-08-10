@@ -1,5 +1,9 @@
 package ve.edu.unet;
 
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /* La idea principal de esta clase (Utilidades de Generacion)es ayudar a emitir las 
  * sentencias en el asembler de la Tiny Machine (TM), haciendo mas sencilla la 
  * implementacion de un generador de codigo objeto para la misma.
@@ -11,6 +15,10 @@ public class UtGen {
 	private static int instruccionActual=0;	//Direccion (num linea) actual de emision de la instruccion
 	private static int instruccionMasAlta=0;	//Almacena la direccion de la instruccion que ha resultado ser la mayor hasta ahora 
 	public static boolean debug=true;
+	
+	// Variables para manejo de archivo de salida
+	private static PrintWriter archivoSalida = null;
+	private static boolean usarArchivo = false;
 
 	/* PC = program counter, registro[7] donde se almacena la direccion (linea)
 	 *  actual de ejecucion del codigo objeto 
@@ -33,9 +41,43 @@ public class UtGen {
 	/* Defino al registro[1] como el acumulador 2 */
 	public static int  AC1=1;
 	
+	// Metodos para manejo de archivo de salida
+	public static void configurarArchivoSalida(String nombreArchivo) {
+		try {
+			archivoSalida = new PrintWriter(new FileWriter(nombreArchivo));
+			usarArchivo = true;
+		} catch (IOException e) {
+			System.err.println("Error al crear archivo de salida: " + e.getMessage());
+			usarArchivo = false;
+		}
+	}
+	
+	public static void cerrarArchivoSalida() {
+		if (archivoSalida != null) {
+			archivoSalida.close();
+			archivoSalida = null;
+			usarArchivo = false;
+		}
+	}
+	
+	private static void escribir(String texto) {
+		if (usarArchivo && archivoSalida != null) {
+			archivoSalida.print(texto);
+		} else {
+			System.out.print(texto);
+		}
+	}
+	
+	private static void escribirLinea(String texto) {
+		if (usarArchivo && archivoSalida != null) {
+			archivoSalida.println(texto);
+		} else {
+			System.out.println(texto);
+		}
+	}
 	
 	public static void emitirComentario(String c){
-		if(debug) System.out.println("*      "+c);
+		if(debug) escribirLinea("*      "+c);
 	}
 
 	/* Este procedimiento emite sentencias RO (Solo Registro)
@@ -49,10 +91,10 @@ public class UtGen {
 	 * c = comentario a emitir en modo debug
 	 */
 	public static void emitirRO(String op, int r, int s, int t, String c){
-		System.out.print((instruccionActual++)+":       "+op+"       "+r+","+s+","+t );
+		escribir((instruccionActual++)+":       "+op+"       "+r+","+s+","+t );
 		if(debug)
-			System.out.print("      "+c);
-		System.out.print("\n");
+			escribir("      "+c);
+		escribir("\n");
 		if(instruccionMasAlta < instruccionActual) 
 			instruccionMasAlta = instruccionActual;
 	}
@@ -68,10 +110,10 @@ public class UtGen {
 	 * c = comentario a emitir en modo debug
 	 */	
 	public static void emitirRM(String op, int r, int d, int s, String c){
-		System.out.print((instruccionActual++)+":       "+op+"       "+r+","+d+"("+s+")" );
+		escribir((instruccionActual++)+":       "+op+"       "+r+","+d+"("+s+")" );
 		if(debug)
-			System.out.print("      "+c);
-		System.out.print("\n");
+			escribir("      "+c);
+		escribir("\n");
 		if(instruccionMasAlta < instruccionActual) 
 			instruccionMasAlta = instruccionActual;	
 	}
@@ -114,11 +156,11 @@ public class UtGen {
 	 * c = comentario a emitir en modo debug
 	 */
 	public static void emitirRM_Abs(String op, int r, int a, String c){
-		System.out.print((instruccionActual)+":       "+op+"       "+r+","+(a-(instruccionActual+1))+"("+PC+")" );
+		escribir((instruccionActual)+":       "+op+"       "+r+","+(a-(instruccionActual+1))+"("+PC+")" );
 		++instruccionActual;
 		if(debug)
-			System.out.print("      "+c);
-		System.out.print("\n");
+			escribir("      "+c);
+		escribir("\n");
 		if(instruccionMasAlta < instruccionActual) 
 			instruccionMasAlta = instruccionActual;	
 	}

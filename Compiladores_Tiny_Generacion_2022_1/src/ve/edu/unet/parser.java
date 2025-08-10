@@ -572,10 +572,14 @@ Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols
 	public static void main(String args[]) throws Exception {
 		SymbolFactory sf = new DefaultSymbolFactory();
 		parser parser_obj;
+		String archivoFuente = null;
+		
 		if (args.length==0) 
 			parser_obj=new parser(new LexicoExtendido(new InputStreamReader(System.in),sf),sf);
-		else
+		else {
+			archivoFuente = args[0];
 			parser_obj=new parser(new LexicoExtendido(new InputStreamReader(new java.io.FileInputStream(args[0])),sf),sf);
+		}
 
 		parser_obj.parse();
 		NodoBase root=parser_obj.action_obj.getASTroot();
@@ -587,7 +591,25 @@ Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols
 		ts.cargarTabla(root);
 		ts.ImprimirClaves();
 		Generador.setTablaSimbolos(ts);
-		Generador.generarCodigoObjeto(root);
+		
+		// Generar nombre del archivo de salida .tm
+		String archivoSalida = null;
+		if (archivoFuente != null) {
+			// Extraer nombre base del archivo sin extensión
+			String nombreBase = archivoFuente.substring(archivoFuente.lastIndexOf("/") + 1);
+			if (nombreBase.contains(".")) {
+				nombreBase = nombreBase.substring(0, nombreBase.lastIndexOf("."));
+			}
+			archivoSalida = "ejemplo_generado/" + nombreBase + ".tm";
+			
+			// Crear directorio si no existe
+			java.io.File dir = new java.io.File("ejemplo_generado");
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
+		}
+		
+		Generador.generarCodigoObjeto(root, archivoSalida);
 	}
 
 
