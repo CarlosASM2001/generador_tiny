@@ -134,14 +134,41 @@ public class Generador {
 		NodoDeclaracion n = (NodoDeclaracion)nodo;
 		if(UtGen.debug) UtGen.emitirComentario("-> declaracion: " + n.getNombreVariable());
 		
-		// Las declaraciones son manejadas por la tabla de símbolos
-		// Solo emitimos comentarios para claridad
+		// Obtener la dirección asignada por la tabla de símbolos
+		int direccion = tablaSimbolos.getDireccion(n.getNombreVariable());
+		
 		if(n.isEsArray()){
+			// Declaración de array
 			UtGen.emitirComentario("Declaracion de array: " + n.getNombreVariable() + 
 								  (n.getTamaño() != null ? " tamaño definido" : " tamaño por parámetro"));
+			
+			if(n.getTamaño() != null && n.isEsGlobal()){
+				// Array global con tamaño definido - reservar espacio
+				generar(n.getTamaño());  // Evaluar el tamaño
+				int tamaño = ((NodoValor)n.getTamaño()).getValorEntero(); // Obtener valor constante
+				
+				// Inicializar elementos del array a cero
+				for(int i = 0; i < tamaño; i++){
+					UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "array: inicializar elemento " + i + " a cero");
+					UtGen.emitirRM("ST", UtGen.AC, direccion + i, UtGen.GP, "array: almacenar en posicion " + (direccion + i));
+				}
+			}
 		} else {
+			// Declaración de variable simple
 			UtGen.emitirComentario("Declaracion de variable: " + n.getNombreVariable() + 
 								  (n.isEsGlobal() ? " (global)" : " (local)"));
+			
+			if(n.isEsGlobal()){
+				// Variable global - inicializar a cero
+				UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "global: inicializar variable " + n.getNombreVariable() + " a cero");
+				UtGen.emitirRM("ST", UtGen.AC, direccion, UtGen.GP, "global: almacenar en direccion " + direccion);
+			} else {
+				// Variable local - reservar espacio en el frame actual
+				UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "local: inicializar variable " + n.getNombreVariable() + " a cero");
+				UtGen.emitirRM("ST", UtGen.AC, direccion, UtGen.GP, "local: almacenar en direccion " + direccion);
+				// Nota: En una implementación más sofisticada, las variables locales 
+				// deberían usar un frame pointer diferente del GP
+			}
 		}
 		
 		if(UtGen.debug) UtGen.emitirComentario("<- declaracion");
@@ -570,5 +597,14 @@ public class Generador {
 		UtGen.emitirComentario("Preludio estandar:");
 		UtGen.emitirRM("LD", UtGen.MP, 0, UtGen.AC, "cargar la maxima direccion desde la localidad 0");
 		UtGen.emitirRM("ST", UtGen.AC, 0, UtGen.AC, "limpio el registro de la localidad 0");
+		
+		// Configurar el Global Pointer (GP) para que apunte al inicio del área de variables globales
+		UtGen.emitirRM("LDC", UtGen.GP, 0, 0, "GP apunta al inicio de variables globales (direccion 0)");
+		
+		// Información sobre el uso de memoria
+		if(tablaSimbolos != null){
+			int totalMemoria = tablaSimbolos.getTotalMemoriaUtilizada();
+			UtGen.emitirComentario("Total de memoria reservada para variables: " + totalMemoria + " posiciones");
+		}
 	}
 }

@@ -33,7 +33,30 @@ public class TablaSimbolos {
 			}
 			else if (raiz instanceof NodoDeclaracion){
 				NodoDeclaracion decl = (NodoDeclaracion)raiz;
-				InsertarSimbolo(decl.getNombreVariable(), -1);
+				
+				// Calcular el tamaño necesario para la variable/array
+				int tamaño = 1; // Por defecto, las variables ocupan 1 posición
+				
+				if(decl.isEsArray() && decl.getTamaño() != null){
+					// Si es un array con tamaño definido
+					try {
+						if(decl.getTamaño() instanceof NodoValor){
+							tamaño = ((NodoValor)decl.getTamaño()).getValorEntero();
+						}
+					} catch (Exception e) {
+						System.out.println("Warning: No se pudo determinar el tamaño del array " + decl.getNombreVariable());
+						tamaño = 10; // Tamaño por defecto
+					}
+				}
+				
+				// Insertar símbolo con la dirección actual
+				if(InsertarSimbolo(decl.getNombreVariable(), -1)){
+					// Si es un array, incrementar el contador de direcciones por el tamaño
+					if(decl.isEsArray() && tamaño > 1){
+						direccion += (tamaño - 1); // -1 porque ya se incrementó en InsertarSimbolo
+						System.out.println("Array " + decl.getNombreVariable() + " ocupa " + tamaño + " posiciones de memoria");
+					}
+				}
 			}
 			else if (raiz instanceof NodoFuncion){
 				NodoFuncion func = (NodoFuncion)raiz;
@@ -130,14 +153,25 @@ public class TablaSimbolos {
 	
 	public void ImprimirClaves(){
 		System.out.println("*** Tabla de Simbolos ***");
+		System.out.println("Total de posiciones de memoria utilizadas: " + direccion);
 		for( Iterator <String>it = tabla.keySet().iterator(); it.hasNext();) { 
             String s = (String)it.next();
-	    System.out.println("Consegui Key: "+s+" con direccion: " + BuscarSimbolo(s).getDireccionMemoria());
+	    System.out.println("Variable: "+s+" -> Direccion: " + BuscarSimbolo(s).getDireccionMemoria());
 		}
 	}
 
 	public int getDireccion(String Clave){
-		return BuscarSimbolo(Clave).getDireccionMemoria();
+		RegistroSimbolo simbolo = BuscarSimbolo(Clave);
+		if(simbolo != null){
+			return simbolo.getDireccionMemoria();
+		} else {
+			System.out.println("ERROR: Variable no encontrada en tabla de simbolos: " + Clave);
+			return -1;
+		}
+	}
+	
+	public int getTotalMemoriaUtilizada(){
+		return direccion;
 	}
 	
 	/*
