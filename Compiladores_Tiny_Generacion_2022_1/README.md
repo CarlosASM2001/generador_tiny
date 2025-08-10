@@ -34,6 +34,13 @@ Compila el compilador completo desde las especificaciones de gramática.
 - Genera el analizador sintáctico con Java CUP
 - Compila todas las clases Java
 
+### `./compilar_y_ejecutar.sh` ⭐ **NUEVO**
+Compila un programa TINY y genera archivo .tm para ejecución.
+- Genera código objeto en archivo `.tm`
+- Intenta ejecutar automáticamente con `tiny64.exe`
+- Proporciona instrucciones claras para ejecución manual
+- **Uso:** `./compilar_y_ejecutar.sh <archivo.tiny>`
+
 ### `./ejecutar_con_salida.sh`
 Ejecuta el compilador con el archivo de prueba y muestra la salida completa.
 - Compatible con Windows y Linux (detecta automáticamente el separador de classpath)
@@ -115,3 +122,20 @@ El compilador genera:
 2. **Análisis Sintáctico**: Construcción del AST
 3. **Tabla de Símbolos**: Variables y funciones declaradas
 4. **Código Objeto**: Instrucciones para la máquina virtual TM
+5. **Archivo .tm**: Código objeto ejecutable (cuando se usa con archivo fuente) ⭐ **NUEVO**
+
+## Nueva Funcionalidad de Ejecución ⭐
+
+El compilador ahora puede:
+- **Generar archivos `.tm`** automáticamente desde código fuente TINY
+- **Ejecutar el código objeto** con `tiny64.exe` 
+- **Mostrar instrucciones claras** para ejecución manual cuando sea necesario
+
+**Ejemplo de uso:**
+```bash
+./compilar_y_ejecutar.sh test_simple.tiny
+# Genera: test_simple.tm
+# Intenta ejecutar automáticamente o proporciona instrucciones
+```
+
+Ver `INSTRUCCIONES_EJECUCION.md` para documentación completa.

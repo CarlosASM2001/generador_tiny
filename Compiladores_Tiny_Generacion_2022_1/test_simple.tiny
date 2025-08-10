@@ -1,0 +1,8 @@
+{ Programa TINY simple para prueba }
+global x;
+begin
+    write "Ingrese un numero: ";
+    read x;
+    write "El numero ingresado es: ";
+    write x
+end

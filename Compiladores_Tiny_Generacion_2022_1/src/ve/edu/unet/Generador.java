@@ -1,6 +1,8 @@
 package ve.edu.unet;
 
 import ve.edu.unet.nodosAST.*;
+import java.io.IOException;
+import java.io.File;
 
 public class Generador {
 	/* Ilustracion de la disposicion de la memoria en
@@ -58,6 +60,120 @@ public class Generador {
 		System.out.println();
 		System.out.println();
 		System.out.println("------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------");
+	}
+	
+	public static void generarCodigoObjetoArchivo(NodoBase raiz, String nombreArchivoFuente){
+		// Reiniciar contadores para nueva compilación
+		UtGen.reiniciarContadores();
+		
+		// Extraer nombre base del archivo fuente (sin directorio y sin extensión)
+		String nombreBase = nombreArchivoFuente;
+		if (nombreBase.contains("/")) {
+			nombreBase = nombreBase.substring(nombreBase.lastIndexOf("/") + 1);
+		}
+		if (nombreBase.contains("\\")) {
+			nombreBase = nombreBase.substring(nombreBase.lastIndexOf("\\") + 1);
+		}
+		if (nombreBase.contains(".")) {
+			nombreBase = nombreBase.substring(0, nombreBase.lastIndexOf("."));
+		}
+		
+		// Iniciar archivo de salida
+		UtGen.iniciarArchivoSalida(nombreBase);
+		
+		System.out.println();
+		System.out.println();
+		System.out.println("------ CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------");
+		System.out.println();
+		System.out.println();
+		generarPreludioEstandar();
+		generar(raiz);
+		/*Genero el codigo de finalizacion de ejecucion del codigo*/   
+		UtGen.emitirComentario("Fin de la ejecucion.");
+		UtGen.emitirRO("HALT", 0, 0, 0, "");
+		System.out.println();
+		System.out.println();
+		System.out.println("------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------");
+		
+		// Cerrar archivo de salida
+		UtGen.cerrarArchivoSalida();
+	}
+	
+	/**
+	 * Ejecuta el archivo TM generado con tiny64.exe
+	 * @param nombreArchivoTM Nombre del archivo .tm a ejecutar
+	 */
+	public static void ejecutarArchivoTM(String nombreArchivoTM) {
+		try {
+			// Buscar tiny64.exe en el directorio tools
+			File tiny64 = new File("tools/tiny64.exe");
+			if (!tiny64.exists()) {
+				System.err.println("Error: No se encontró tiny64.exe en el directorio tools/");
+				return;
+			}
+			
+			// Verificar que existe el archivo .tm
+			File archivoTM = new File(nombreArchivoTM);
+			if (!archivoTM.exists()) {
+				System.err.println("Error: No se encontró el archivo " + nombreArchivoTM);
+				return;
+			}
+			
+			System.out.println();
+			System.out.println("==== EJECUTANDO CODIGO OBJETO CON TINY64 ====");
+			System.out.println("Archivo: " + nombreArchivoTM);
+			System.out.println();
+			
+			// Intentar ejecutar con diferentes métodos
+			boolean ejecutado = false;
+			
+			// Método 1: Intentar ejecutar directamente
+			try {
+				ProcessBuilder pb = new ProcessBuilder("tools/tiny64.exe", nombreArchivoTM);
+				pb.inheritIO();
+				Process proceso = pb.start();
+				int codigoSalida = proceso.waitFor();
+				
+				System.out.println();
+				System.out.println("==== EJECUCION COMPLETADA ====");
+				System.out.println("Código de salida: " + codigoSalida);
+				ejecutado = true;
+				
+			} catch (IOException e1) {
+				// Método 2: Intentar con Wine (si está disponible)
+				try {
+					ProcessBuilder pb = new ProcessBuilder("wine", "tools/tiny64.exe", nombreArchivoTM);
+					pb.inheritIO();
+					Process proceso = pb.start();
+					int codigoSalida = proceso.waitFor();
+					
+					System.out.println();
+					System.out.println("==== EJECUCION COMPLETADA (con Wine) ====");
+					System.out.println("Código de salida: " + codigoSalida);
+					ejecutado = true;
+					
+				} catch (IOException e2) {
+					// Si ningún método funciona, mostrar instrucciones
+					System.out.println("No se pudo ejecutar tiny64.exe automáticamente.");
+					System.out.println();
+					System.out.println("INSTRUCCIONES PARA EJECUTAR MANUALMENTE:");
+					System.out.println("========================================");
+					System.out.println("1. En Windows:");
+					System.out.println("   tools\\tiny64.exe " + nombreArchivoTM);
+					System.out.println();
+					System.out.println("2. En Linux con Wine:");
+					System.out.println("   wine tools/tiny64.exe " + nombreArchivoTM);
+					System.out.println();
+					System.out.println("3. Copiar el archivo " + nombreArchivoTM + " a un sistema Windows");
+					System.out.println("   y ejecutar: tiny64.exe " + nombreArchivoTM);
+					System.out.println();
+					System.out.println("El archivo de código objeto se ha generado exitosamente.");
+				}
+			}
+			
+		} catch (InterruptedException e) {
+			System.err.println("Ejecución interrumpida: " + e.getMessage());
+		}
 	}
 	
 	//Funcion principal de generacion de codigo

@@ -572,10 +572,14 @@ Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols
 	public static void main(String args[]) throws Exception {
 		SymbolFactory sf = new DefaultSymbolFactory();
 		parser parser_obj;
-		if (args.length==0) 
+		String nombreArchivo = null;
+		
+		if (args.length==0) {
 			parser_obj=new parser(new LexicoExtendido(new InputStreamReader(System.in),sf),sf);
-		else
+		} else {
+			nombreArchivo = args[0];
 			parser_obj=new parser(new LexicoExtendido(new InputStreamReader(new java.io.FileInputStream(args[0])),sf),sf);
+		}
 
 		parser_obj.parse();
 		NodoBase root=parser_obj.action_obj.getASTroot();
@@ -587,7 +591,21 @@ Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols
 		ts.cargarTabla(root);
 		ts.ImprimirClaves();
 		Generador.setTablaSimbolos(ts);
-		Generador.generarCodigoObjeto(root);
+		
+		if (nombreArchivo != null) {
+			// Generar código objeto en archivo .tm
+			Generador.generarCodigoObjetoArchivo(root, nombreArchivo);
+			
+			// Obtener nombre del archivo .tm generado
+			String archivoTM = UtGen.getNombreArchivo();
+			if (archivoTM != null) {
+				// Ejecutar el archivo .tm con tiny64.exe
+				Generador.ejecutarArchivoTM(archivoTM);
+			}
+		} else {
+			// Modo original - solo mostrar en consola
+			Generador.generarCodigoObjeto(root);
+		}
 	}
 
 
