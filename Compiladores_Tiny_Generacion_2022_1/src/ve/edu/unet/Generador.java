@@ -33,18 +33,34 @@ public class Generador {
 	 * y extraccion de esta pila
 	 */
 	private static int desplazamientoTmp = 0;
+	//referencia a la tabla de simbolos
 	private static TablaSimbolos tablaSimbolos = null;
+	
+	// Nombre del archivo fuente siendo compilado
+	private static String archivoFuente = "programa_extendido.tiny";
 	
 	// Variables para manejo de funciones
 	private static int contadorEtiquetas = 0;
+	
+	/* variables auxiliares para saltos a puntos de escape (break y continue) */
 	private static java.util.Stack<Integer> pilaBreak = new java.util.Stack<Integer>();
 	private static java.util.Stack<Integer> pilaContinue = new java.util.Stack<Integer>();
 	
-	public static void setTablaSimbolos(TablaSimbolos tabla){
-		tablaSimbolos = tabla;
+	public static void setTablaSimbolos(TablaSimbolos ts){
+		tablaSimbolos = ts;
 	}
 	
+	public static void setArchivoFuente(String archivo) {
+		archivoFuente = archivo;
+	}
+
 	public static void generarCodigoObjeto(NodoBase raiz){
+		// Reiniciar contadores para nueva compilación
+		UtGen.reiniciar();
+		
+		// Inicializar archivo .tm - usamos el nombre del archivo fuente que está siendo compilado
+		UtGen.inicializarArchivo(archivoFuente);
+		
 		System.out.println();
 		System.out.println();
 		System.out.println("------ CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------");
@@ -58,6 +74,15 @@ public class Generador {
 		System.out.println();
 		System.out.println();
 		System.out.println("------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------");
+		
+		// Cerrar archivo .tm
+		UtGen.cerrarArchivo();
+	}
+	
+	/* Obtener nombre del archivo fuente desde argumentos o usar nombre por defecto */
+	private static String obtenerNombreArchivoFuente() {
+		// Por defecto usamos el nombre del archivo de prueba
+		return "programa_extendido.tiny";
 	}
 	
 	//Funcion principal de generacion de codigo

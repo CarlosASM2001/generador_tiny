@@ -1,5 +1,9 @@
 package ve.edu.unet;
 
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /* La idea principal de esta clase (Utilidades de Generacion)es ayudar a emitir las 
  * sentencias en el asembler de la Tiny Machine (TM), haciendo mas sencilla la 
  * implementacion de un generador de codigo objeto para la misma.
@@ -11,6 +15,10 @@ public class UtGen {
 	private static int instruccionActual=0;	//Direccion (num linea) actual de emision de la instruccion
 	private static int instruccionMasAlta=0;	//Almacena la direccion de la instruccion que ha resultado ser la mayor hasta ahora 
 	public static boolean debug=true;
+	
+	// PrintWriter para escribir al archivo .tm
+	private static PrintWriter archivoTM = null;
+	private static String nombreArchivo = null;
 
 	/* PC = program counter, registro[7] donde se almacena la direccion (linea)
 	 *  actual de ejecucion del codigo objeto 
@@ -33,9 +41,58 @@ public class UtGen {
 	/* Defino al registro[1] como el acumulador 2 */
 	public static int  AC1=1;
 	
+	/* Inicializar archivo .tm de salida */
+	public static void inicializarArchivo(String nombreArchivoFuente) {
+		try {
+			// Crear el directorio ejemplo_generado si no existe
+			java.io.File directorio = new java.io.File("ejemplo_generado");
+			if (!directorio.exists()) {
+				directorio.mkdirs();
+			}
+			
+			// Generar nombre del archivo .tm basado en el archivo fuente
+			String nombreBase = nombreArchivoFuente;
+			if (nombreBase.contains("/")) {
+				nombreBase = nombreBase.substring(nombreBase.lastIndexOf("/") + 1);
+			}
+			if (nombreBase.contains("\\")) {
+				nombreBase = nombreBase.substring(nombreBase.lastIndexOf("\\") + 1);
+			}
+			if (nombreBase.endsWith(".tiny")) {
+				nombreBase = nombreBase.substring(0, nombreBase.length() - 5);
+			}
+			
+			nombreArchivo = "ejemplo_generado/" + nombreBase + ".tm";
+			archivoTM = new PrintWriter(new FileWriter(nombreArchivo));
+			
+			System.out.println("Generando archivo objeto: " + nombreArchivo);
+		} catch (IOException e) {
+			System.err.println("Error al crear archivo .tm: " + e.getMessage());
+		}
+	}
+	
+	/* Cerrar archivo .tm */
+	public static void cerrarArchivo() {
+		if (archivoTM != null) {
+			archivoTM.close();
+			archivoTM = null;
+			System.out.println("Archivo objeto generado: " + nombreArchivo);
+		}
+	}
+	
+	/* Escribir línea tanto a consola como archivo */
+	private static void escribirLinea(String linea) {
+		System.out.print(linea);
+		if (archivoTM != null) {
+			archivoTM.print(linea);
+		}
+	}
 	
 	public static void emitirComentario(String c){
-		if(debug) System.out.println("*      "+c);
+		if(debug) {
+			String linea = "*      "+c+"\n";
+			escribirLinea(linea);
+		}
 	}
 
 	/* Este procedimiento emite sentencias RO (Solo Registro)
@@ -49,10 +106,11 @@ public class UtGen {
 	 * c = comentario a emitir en modo debug
 	 */
 	public static void emitirRO(String op, int r, int s, int t, String c){
-		System.out.print((instruccionActual++)+":       "+op+"       "+r+","+s+","+t );
+		String linea = (instruccionActual++)+":       "+op+"       "+r+","+s+","+t;
 		if(debug)
-			System.out.print("      "+c);
-		System.out.print("\n");
+			linea += "      "+c;
+		linea += "\n";
+		escribirLinea(linea);
 		if(instruccionMasAlta < instruccionActual) 
 			instruccionMasAlta = instruccionActual;
 	}
@@ -68,10 +126,11 @@ public class UtGen {
 	 * c = comentario a emitir en modo debug
 	 */	
 	public static void emitirRM(String op, int r, int d, int s, String c){
-		System.out.print((instruccionActual++)+":       "+op+"       "+r+","+d+"("+s+")" );
+		String linea = (instruccionActual++)+":       "+op+"       "+r+","+d+"("+s+")";
 		if(debug)
-			System.out.print("      "+c);
-		System.out.print("\n");
+			linea += "      "+c;
+		linea += "\n";
+		escribirLinea(linea);
 		if(instruccionMasAlta < instruccionActual) 
 			instruccionMasAlta = instruccionActual;	
 	}
@@ -114,13 +173,20 @@ public class UtGen {
 	 * c = comentario a emitir en modo debug
 	 */
 	public static void emitirRM_Abs(String op, int r, int a, String c){
-		System.out.print((instruccionActual)+":       "+op+"       "+r+","+(a-(instruccionActual+1))+"("+PC+")" );
+		String linea = (instruccionActual)+":       "+op+"       "+r+","+(a-(instruccionActual+1))+"("+PC+")";
 		++instruccionActual;
 		if(debug)
-			System.out.print("      "+c);
-		System.out.print("\n");
+			linea += "      "+c;
+		linea += "\n";
+		escribirLinea(linea);
 		if(instruccionMasAlta < instruccionActual) 
 			instruccionMasAlta = instruccionActual;	
+	}
+	
+	/* Reiniciar contadores para nueva compilación */
+	public static void reiniciar() {
+		instruccionActual = 0;
+		instruccionMasAlta = 0;
 	}
 	
 /*TODO: Cambiar emision por pantalla por stream*/	
