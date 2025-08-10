@@ -1,0 +1,62 @@
+{Programa de ejemplo con la nueva sintaxis simplificada}
+
+global x;
+global vector : array[5];
+
+function calcular(a, b)
+begin
+    var resultado;
+    if a > b then
+        resultado := a * 2
+    else
+        resultado := b * 2
+    end;
+    return resultado
+end
+
+begin
+    var i;
+    var num;
+    var suma;
+    
+    write "Ingrese un número: ";
+    read num;
+    
+    // Inicializar vector
+    for i := 0 to 4 step 1
+        vector[i] := i + num
+    end;
+    
+    // Probar operadores
+    if num >= 0 && num <= 10 then
+        write "Número válido";
+        suma := 0;
+        
+        // Sumar elementos del vector
+        for i := 0 to 4 step 1
+            suma := suma + vector[i];
+            if vector[i] % 2 = 0 then
+                write "Par encontrado"
+            end
+        end;
+        
+        write "Suma total: ";
+        write suma;
+        
+        // Llamar función
+        x := call calcular(num, suma);
+        write "Resultado función: ";
+        write x
+    else
+        write "Número fuera de rango"
+    end;
+    
+    // Prueba con operadores lógicos
+    if (num > 5) || (num < 0) then
+        write "Condición OR verdadera"
+    end;
+    
+    if !(num != 5) then
+        write "El número es 5"
+    end
+end
