@@ -6,11 +6,16 @@ package ve.edu.unet;
  * Esta clase maneja y ayuda gestionar el numero de linea (localidad de sentencia) 
  * en la cual se debe emitir una instruccion TM.
  */
+	import java.io.FileWriter;   
+	import java.io.IOException;  
+	import java.io.PrintWriter; 
 
 public class UtGen {
 	private static int instruccionActual=0;	//Direccion (num linea) actual de emision de la instruccion
 	private static int instruccionMasAlta=0;	//Almacena la direccion de la instruccion que ha resultado ser la mayor hasta ahora 
 	public static boolean debug=true;
+
+	private static PrintWriter out = null;
 
 	/* PC = program counter, registro[7] donde se almacena la direccion (linea)
 	 *  actual de ejecucion del codigo objeto 
@@ -33,9 +38,28 @@ public class UtGen {
 	/* Defino al registro[1] como el acumulador 2 */
 	public static int  AC1=1;
 	
+
+	// NUEVO MÉTODO para empezar a escribir en un archivo
+	public static void iniciarArchivo(String nombreArchivo) {
+		try {
+			out = new PrintWriter(new FileWriter(nombreArchivo));
+		} catch (IOException e) {
+			System.err.println("Error: No se pudo abrir el archivo de salida " + nombreArchivo);
+			out = null;
+		}
+	}
+
+	// NUEVO MÉTODO para cerrar el archivo al final
+	public static void cerrarArchivo() {
+		if (out != null) {
+			out.close();
+		}
+	}
 	
 	public static void emitirComentario(String c){
-		if(debug) System.out.println("*      "+c);
+		String comentario = "*      "+c;
+		if(debug) System.out.println(comentario);
+		if (out != null) out.println(comentario);
 	}
 
 	/* Este procedimiento emite sentencias RO (Solo Registro)
@@ -49,10 +73,14 @@ public class UtGen {
 	 * c = comentario a emitir en modo debug
 	 */
 	public static void emitirRO(String op, int r, int s, int t, String c){
+		String linea = String.format("%d:       %s       %d,%d,%d", instruccionActual++, op, r, s, t);
 		System.out.print((instruccionActual++)+":       "+op+"       "+r+","+s+","+t );
 		if(debug)
 			System.out.print("      "+c);
 		System.out.print("\n");
+		
+		if (out != null) out.println(linea);
+
 		if(instruccionMasAlta < instruccionActual) 
 			instruccionMasAlta = instruccionActual;
 	}
@@ -68,10 +96,12 @@ public class UtGen {
 	 * c = comentario a emitir en modo debug
 	 */	
 	public static void emitirRM(String op, int r, int d, int s, String c){
+		 String linea = String.format("%d:       %s       %d,%d(%d)", instruccionActual++, op, r, d, s);
 		System.out.print((instruccionActual++)+":       "+op+"       "+r+","+d+"("+s+")" );
 		if(debug)
 			System.out.print("      "+c);
 		System.out.print("\n");
+		if (out != null) out.println(linea);
 		if(instruccionMasAlta < instruccionActual) 
 			instruccionMasAlta = instruccionActual;	
 	}
@@ -114,11 +144,13 @@ public class UtGen {
 	 * c = comentario a emitir en modo debug
 	 */
 	public static void emitirRM_Abs(String op, int r, int a, String c){
+		String linea = String.format("%d:       %s       %d,%d(%d)", instruccionActual, op, r, (a-(instruccionActual+1)), PC);
 		System.out.print((instruccionActual)+":       "+op+"       "+r+","+(a-(instruccionActual+1))+"("+PC+")" );
 		++instruccionActual;
 		if(debug)
 			System.out.print("      "+c);
 		System.out.print("\n");
+		if (out != null) out.println(linea);
 		if(instruccionMasAlta < instruccionActual) 
 			instruccionMasAlta = instruccionActual;	
 	}

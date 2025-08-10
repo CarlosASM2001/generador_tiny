@@ -8,6 +8,7 @@ package ve.edu.unet;
 import java_cup.runtime.*;
 import ve.edu.unet.nodosAST.*;
 import java.io.InputStreamReader;
+import java.io.FileInputStream;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -569,26 +570,51 @@ SymbolFactory es una nueva caracteristica que ha sido añadida a las version 11a
 , esto debido a que dicha clase no provee mucha información de contexto que podria ser util para el analisis semantico o ayudar en la construccion del AST
 Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols-in-cup/
 ***********/
+	
+    // ===== INICIO DE LA SECCIÓN MODIFICADA =====
 	public static void main(String args[]) throws Exception {
 		SymbolFactory sf = new DefaultSymbolFactory();
 		parser parser_obj;
-		if (args.length==0) 
+
+        // --- Manejo de nombres de archivo ---
+        String archivoEntrada = "";
+        String archivoSalida = "salida.tm"; // Nombre por defecto si no se pasa archivo de entrada
+
+		if (args.length > 0) {
+            archivoEntrada = args[0];
+            // Crea el nombre de salida reemplazando la extensión por .tm
+            if (archivoEntrada.contains(".")) {
+                archivoSalida = archivoEntrada.substring(0, archivoEntrada.lastIndexOf('.')) + ".tm";
+            } else {
+                archivoSalida = archivoEntrada + ".tm";
+            }
+			parser_obj=new parser(new LexicoExtendido(new InputStreamReader(new FileInputStream(archivoEntrada)),sf),sf);
+		} else {
 			parser_obj=new parser(new LexicoExtendido(new InputStreamReader(System.in),sf),sf);
-		else
-			parser_obj=new parser(new LexicoExtendido(new InputStreamReader(new java.io.FileInputStream(args[0])),sf),sf);
+        }
 
 		parser_obj.parse();
 		NodoBase root=parser_obj.action_obj.getASTroot();
-		System.out.println();
+		
+        System.out.println();
 		System.out.println("IMPRESION DEL AST GENERADO");
 		System.out.println();
-        Util.imprimirAST(root);
-		TablaSimbolos ts = new TablaSimbolos();
-		ts.cargarTabla(root);
+        if (root != null) Util.imprimirAST(root);
+		
+        TablaSimbolos ts = new TablaSimbolos();
+		if (root != null) ts.cargarTabla(root);
 		ts.ImprimirClaves();
-		Generador.setTablaSimbolos(ts);
-		Generador.generarCodigoObjeto(root);
+		
+        Generador.setTablaSimbolos(ts);
+
+        // --- Iniciar y cerrar el archivo para la salida del código TM ---
+        UtGen.iniciarArchivo(archivoSalida);
+        System.out.println("\nGenerando código objeto en el archivo: " + archivoSalida);
+        if (root != null) Generador.generarCodigoObjeto(root);
+        UtGen.cerrarArchivo();
+        System.out.println("Archivo " + archivoSalida + " generado exitosamente.");
 	}
+    // ===== FIN DE LA SECCIÓN MODIFICADA =====
 
 
 
