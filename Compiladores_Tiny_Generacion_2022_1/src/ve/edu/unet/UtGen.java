@@ -1,5 +1,8 @@
 package ve.edu.unet;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 /* La idea principal de esta clase (Utilidades de Generacion)es ayudar a emitir las 
  * sentencias en el asembler de la Tiny Machine (TM), haciendo mas sencilla la 
  * implementacion de un generador de codigo objeto para la misma.
@@ -11,6 +14,11 @@ public class UtGen {
 	private static int instruccionActual=0;	//Direccion (num linea) actual de emision de la instruccion
 	private static int instruccionMasAlta=0;	//Almacena la direccion de la instruccion que ha resultado ser la mayor hasta ahora 
 	public static boolean debug=true;
+	
+	// Variables para generar archivo .tm
+	private static FileWriter archivoTM = null;
+	private static boolean generarArchivo = false;
+	private static String nombreArchivo = "programa_extendido.tm";
 
 	/* PC = program counter, registro[7] donde se almacena la direccion (linea)
 	 *  actual de ejecucion del codigo objeto 
@@ -33,9 +41,46 @@ public class UtGen {
 	/* Defino al registro[1] como el acumulador 2 */
 	public static int  AC1=1;
 	
+	// Métodos para manejo de archivo
+	public static void iniciarArchivoTM(String nombreArch){
+		nombreArchivo = nombreArch;
+		generarArchivo = true;
+		try {
+			archivoTM = new FileWriter("ejemplo_generado/" + nombreArchivo);
+			System.out.println("Generando archivo TM: ejemplo_generado/" + nombreArchivo);
+		} catch (IOException e) {
+			System.err.println("Error al crear archivo TM: " + e.getMessage());
+			generarArchivo = false;
+		}
+	}
+	
+	public static void cerrarArchivoTM(){
+		if(archivoTM != null){
+			try {
+				archivoTM.close();
+				System.out.println("Archivo TM generado exitosamente: ejemplo_generado/" + nombreArchivo);
+			} catch (IOException e) {
+				System.err.println("Error al cerrar archivo TM: " + e.getMessage());
+			}
+		}
+	}
+	
+	private static void escribirArchivoTM(String linea){
+		if(generarArchivo && archivoTM != null){
+			try {
+				archivoTM.write(linea + "\n");
+			} catch (IOException e) {
+				System.err.println("Error al escribir en archivo TM: " + e.getMessage());
+			}
+		}
+	}
 	
 	public static void emitirComentario(String c){
 		if(debug) System.out.println("*      "+c);
+		// Los comentarios en archivos .tm van con *
+		if(generarArchivo){
+			escribirArchivoTM("* " + c);
+		}
 	}
 
 	/* Este procedimiento emite sentencias RO (Solo Registro)
@@ -49,10 +94,21 @@ public class UtGen {
 	 * c = comentario a emitir en modo debug
 	 */
 	public static void emitirRO(String op, int r, int s, int t, String c){
-		System.out.print((instruccionActual++)+":       "+op+"       "+r+","+s+","+t );
+		String instruccion = instruccionActual + ": " + op + " " + r + "," + s + "," + t;
+		System.out.print(instruccion);
 		if(debug)
 			System.out.print("      "+c);
 		System.out.print("\n");
+		
+		// Escribir al archivo .tm
+		if(generarArchivo){
+			escribirArchivoTM(instruccion);
+			if(!c.isEmpty()){
+				escribirArchivoTM("* " + c);
+			}
+		}
+		
+		instruccionActual++;
 		if(instruccionMasAlta < instruccionActual) 
 			instruccionMasAlta = instruccionActual;
 	}
@@ -68,10 +124,21 @@ public class UtGen {
 	 * c = comentario a emitir en modo debug
 	 */	
 	public static void emitirRM(String op, int r, int d, int s, String c){
-		System.out.print((instruccionActual++)+":       "+op+"       "+r+","+d+"("+s+")" );
+		String instruccion = instruccionActual + ": " + op + " " + r + "," + d + "(" + s + ")";
+		System.out.print(instruccion);
 		if(debug)
 			System.out.print("      "+c);
 		System.out.print("\n");
+		
+		// Escribir al archivo .tm
+		if(generarArchivo){
+			escribirArchivoTM(instruccion);
+			if(!c.isEmpty()){
+				escribirArchivoTM("* " + c);
+			}
+		}
+		
+		instruccionActual++;
 		if(instruccionMasAlta < instruccionActual) 
 			instruccionMasAlta = instruccionActual;	
 	}
@@ -114,11 +181,21 @@ public class UtGen {
 	 * c = comentario a emitir en modo debug
 	 */
 	public static void emitirRM_Abs(String op, int r, int a, String c){
-		System.out.print((instruccionActual)+":       "+op+"       "+r+","+(a-(instruccionActual+1))+"("+PC+")" );
+		String instruccion = instruccionActual + ": " + op + " " + r + "," + (a-(instruccionActual+1)) + "(" + PC + ")";
+		System.out.print(instruccion);
 		++instruccionActual;
 		if(debug)
 			System.out.print("      "+c);
 		System.out.print("\n");
+		
+		// Escribir al archivo .tm
+		if(generarArchivo){
+			escribirArchivoTM(instruccion);
+			if(!c.isEmpty()){
+				escribirArchivoTM("* " + c);
+			}
+		}
+		
 		if(instruccionMasAlta < instruccionActual) 
 			instruccionMasAlta = instruccionActual;	
 	}

@@ -50,11 +50,19 @@ public class Generador {
 		System.out.println("------ CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------");
 		System.out.println();
 		System.out.println();
+		
+		// Iniciar generación de archivo .tm
+		UtGen.iniciarArchivoTM("programa_extendido.tm");
+		
 		generarPreludioEstandar();
 		generar(raiz);
 		/*Genero el codigo de finalizacion de ejecucion del codigo*/   
 		UtGen.emitirComentario("Fin de la ejecucion.");
 		UtGen.emitirRO("HALT", 0, 0, 0, "");
+		
+		// Cerrar archivo .tm
+		UtGen.cerrarArchivoTM();
+		
 		System.out.println();
 		System.out.println();
 		System.out.println("------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------");

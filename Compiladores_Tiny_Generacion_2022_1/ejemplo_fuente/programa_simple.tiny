@@ -1,0 +1,9 @@
+{Programa simple para probar la TM}
+
+global x;
+
+begin
+    x := 42;
+    write x;
+    write "Hola"
+end
