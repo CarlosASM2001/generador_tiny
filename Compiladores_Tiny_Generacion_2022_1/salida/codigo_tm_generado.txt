@@ -1,3 +1,9 @@
+=== Compilando y Ejecutando Programa Extendido ===
+Ejecutando compilador...
+Resultados guardados en: salida/resultado_compilacion.txt
+
+Contenido del archivo de salida:
+================================
 token COMENTARIO
 token COMENTARIO_LINEA
 token GLOBAL
@@ -1207,3 +1213,5 @@ Consegui Key: i con direccion: 5
 
 
 ------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------
+
+=== Compilación completada ===
