@@ -262,6 +262,7 @@ public class Generador {
 		
 		// Comparación: si variable > valor_final, saltar al final
 		UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC1, UtGen.AC, "for: variable - valor_final");
+		// Reservar espacio para el salto condicional (se completará con backpatching)
 		int localidadSaltoFin = UtGen.emitirSalto(1);
 		UtGen.emitirComentario("for: salto condicional al final");
 		

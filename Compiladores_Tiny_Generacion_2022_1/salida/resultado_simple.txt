@@ -1,3 +1,58 @@
+token COMENTARIO_LINEA
+token GLOBAL
+token ID
+token SEMI
+token BEGIN
+	 declaracion global variable
+	 declaracion unica
+token VAR
+token ID
+token SEMI
+token COMENTARIO_LINEA
+token FOR
+	 declaracion variable local
+	 sentencia unica
+token ID
+token ASSIGN
+token NUM
+token TO
+	 numero entero
+token NUM
+token STEP
+	 numero entero
+token NUM
+token WRITE
+	 numero entero
+token ID
+token END
+	 identificador
+	 write expresion
+	 sentencia unica
+token SEMI
+	 for con step
+	 secuencia sentencias sin punto y coma
+token WRITE
+token NUM
+token COMENTARIO_LINEA
+token END
+	 numero entero
+	 write expresion
+	 secuencia sentencias
+	 programa principal
+	 regla programa completo
+
+IMPRESION DEL AST GENERADO
+
+  Tipo de nodo desconocido
+*** Tabla de Simbolos ***
+Total de posiciones de memoria utilizadas: 2
+Variable: x -> Direccion: 0
+Variable: i -> Direccion: 1
+
+
+------ CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------
+
+
 * Compilacion TINY EXTENDIDO para el codigo objeto TM
 * Archivo: programa_extendido.tiny
 * Preludio estandar:
@@ -58,3 +113,8 @@
 * <- programa
 * Fin de la ejecucion.
 25:     HALT      0,0,0         
+
+
+------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------
+Generando código objeto en archivo: ejemplo_generado/programa_extendido.tm
+Archivo ejemplo_generado/programa_extendido.tm generado exitosamente.

@@ -1,5 +1,5 @@
 * Compilacion TINY EXTENDIDO para el codigo objeto TM
-* Archivo: programa_extendido.tiny
+* Archivo: programa_simple.tiny
 * Preludio estandar:
 0:      LDC       6,1000(0)      inicializar MP con direccion base de pila (1000)
 1:      LDC       5,0(0)        GP apunta al inicio de variables globales (direccion 0)
@@ -23,13 +23,13 @@
 7:      ST        0,1(5)        for: inicializar variable i
 * for: inicio del bucle
 8:      LD        0,1(5)        for: cargar variable de control
-9:      ST        0,-1(6)       for: guardar variable en pila temp
+9:      ST        0,-2(6)       for: guardar variable en pila temp
 * -> constante
 10:     LDC       0,3(0)        cargar constante: 3
 * <- constante
-11:     LD        1,-1(6)       for: cargar variable de pila temp
+11:     LD        1,-2(6)       for: cargar variable de pila temp
 12:     SUB       0,1,0         for: variable - valor_final
-* for: salto condicional al final
+13:     JGT       0,9(7)        for: saltar si variable > final - CORREGIDO
 * -> escribir
 * -> identificador
 14:     LD        0,1(5)        cargar valor de identificador: i
@@ -38,17 +38,15 @@
 * <- escribir
 * for: punto de continue
 16:     LD        0,1(5)        for: cargar variable para incremento
-17:     ST        0,-1(6)       for: guardar variable en pila temp
+17:     ST        0,-2(6)       for: guardar variable en pila temp
 * -> constante
 18:     LDC       0,1(0)        cargar constante: 1
 * <- constante
-19:     LD        1,-1(6)       for: cargar variable de pila temp
+19:     LD        1,-2(6)       for: cargar variable de pila temp
 20:     ADD       0,1,0         for: incrementar variable
 21:     ST        0,1(5)        for: guardar variable incrementada
 22:     LDA       7,-15(7)      for: salto al inicio
 * for: fin del bucle
-13:     JGT       0,9(7)        for: saltar si variable > final
-* <- for
 * -> escribir
 * -> constante
 23:     LDC       0,999(0)      cargar constante: 999
@@ -57,4 +55,4 @@
 * <- escribir
 * <- programa
 * Fin de la ejecucion.
-25:     HALT      0,0,0         
+25:     HALT      0,0,0

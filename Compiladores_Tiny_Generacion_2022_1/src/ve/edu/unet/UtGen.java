@@ -148,6 +148,16 @@ public class UtGen {
 		instruccionActual = instruccionMasAlta;
 	}
 	
+	// Método para obtener la instrucción actual
+	public static int obtenerInstruccionActual(){
+		return instruccionActual;
+	}
+	
+	// Método para establecer la instrucción actual
+	public static void establecerInstruccionActual(int nuevaInstruccion){
+		instruccionActual = nuevaInstruccion;
+	}
+	
 	/* El procedimiento emitirRM_Abs convierte una referencia absoluta
 	 * a una referencia relativa al pc (program counter, registro [7])
 	 * cuando se emite una instruccion de tipos registro a memoria (RM)

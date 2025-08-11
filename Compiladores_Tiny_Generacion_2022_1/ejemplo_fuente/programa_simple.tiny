@@ -1,0 +1,13 @@
+// Programa simple para probar bucles FOR
+global x;
+
+begin
+    var i;
+    
+    // Bucle simple que debería ejecutar 3 veces
+    for i := 1 to 3 step 1
+        write i
+    end;
+    
+    write 999  // Indicador de que terminó
+end
