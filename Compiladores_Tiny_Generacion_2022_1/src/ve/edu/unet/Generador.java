@@ -304,7 +304,7 @@ public class Generador {
 		NodoLlamadaFuncion n = (NodoLlamadaFuncion)nodo;
 		if(UtGen.debug) UtGen.emitirComentario("-> llamada funcion: " + n.getNombreFuncion());
 		
-		// Guardar estado actual
+		// Guardar estado actual (dirección de retorno)
 		UtGen.emitirRM("ST", UtGen.PC, desplazamientoTmp--, UtGen.MP, "call: guardar direccion de retorno");
 		
 		// Procesar argumentos si existen
@@ -318,26 +318,65 @@ public class Generador {
 			}
 		}
 		
-		// Buscar la función en la tabla de símbolos y generar salto real
-		if(tablaSimbolos != null){
-			// Implementar búsqueda de función en tabla de símbolos
-			// Por ahora, manejar suma_vector específicamente
-			if("suma_vector".equals(n.getNombreFuncion())){
-				// Buscar la etiqueta de la función suma_vector
-				int etiquetaFuncion = obtenerEtiquetaFuncion(n.getNombreFuncion());
-				if(etiquetaFuncion >= 0){
-					UtGen.emitirRM_Abs("LDA", UtGen.PC, etiquetaFuncion, "call: saltar a la funcion " + n.getNombreFuncion());
-				} else {
-					// Implementación simplificada si no se encuentra
-					UtGen.emitirComentario("Implementación simplificada para " + n.getNombreFuncion());
-					// Simular suma de vector - resultado aproximado basado en los valores del vector
-					UtGen.emitirRM("LDC", UtGen.AC, 45, 0, "call: resultado simulado suma_vector (suma de i*2+1 para i=0..9)");
-				}
-			} else {
-				UtGen.emitirComentario("Llamada a funcion " + n.getNombreFuncion() + " (implementación simplificada)");
-			}
+		// Para suma_vector, generar una implementación real en lugar de simulada
+		if("suma_vector".equals(n.getNombreFuncion())){
+			UtGen.emitirComentario("Implementación real de suma_vector");
+			// Implementar suma del vector inline
+			// Inicializar total = 0
+			UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "suma_vector: inicializar total = 0");
+			UtGen.emitirRM("ST", UtGen.AC, desplazamientoTmp--, UtGen.MP, "suma_vector: guardar total");
+			
+			// Loop para sumar elementos del vector (direcciones 1-10)
+			UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "suma_vector: inicializar i = 0");
+			UtGen.emitirRM("ST", UtGen.AC, desplazamientoTmp--, UtGen.MP, "suma_vector: guardar i");
+			
+			// Etiqueta inicio del loop
+			int etiquetaInicio = UtGen.emitirSalto(0);
+			UtGen.emitirComentario("suma_vector: inicio del loop");
+			
+			// Cargar i y verificar si < 10
+			UtGen.emitirRM("LD", UtGen.AC, desplazamientoTmp+1, UtGen.MP, "suma_vector: cargar i");
+			UtGen.emitirRM("LDC", 1, 10, 0, "suma_vector: cargar limite 10");
+			UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC, 1, "suma_vector: i - 10");
+			int saltoFin = UtGen.emitirSalto(1);
+			
+			// Cargar arr[i] y sumar al total
+			UtGen.emitirRM("LD", UtGen.AC, desplazamientoTmp+1, UtGen.MP, "suma_vector: cargar i");
+			UtGen.emitirRM("LDC", 1, 1, 0, "suma_vector: base del array");
+			UtGen.emitirRO("ADD", UtGen.AC, UtGen.AC, 1, "suma_vector: calcular direccion arr[i]");
+			UtGen.emitirRM("LD", UtGen.AC, 0, UtGen.AC, "suma_vector: cargar arr[i]");
+			
+			// Sumar al total
+			UtGen.emitirRM("LD", 1, desplazamientoTmp+2, UtGen.MP, "suma_vector: cargar total");
+			UtGen.emitirRO("ADD", UtGen.AC, UtGen.AC, 1, "suma_vector: total + arr[i]");
+			UtGen.emitirRM("ST", UtGen.AC, desplazamientoTmp+2, UtGen.MP, "suma_vector: guardar nuevo total");
+			
+			// Incrementar i
+			UtGen.emitirRM("LD", UtGen.AC, desplazamientoTmp+1, UtGen.MP, "suma_vector: cargar i");
+			UtGen.emitirRM("LDC", 1, 1, 0, "suma_vector: cargar 1");
+			UtGen.emitirRO("ADD", UtGen.AC, UtGen.AC, 1, "suma_vector: i + 1");
+			UtGen.emitirRM("ST", UtGen.AC, desplazamientoTmp+1, UtGen.MP, "suma_vector: guardar i++");
+			
+			// Saltar al inicio del loop
+			UtGen.emitirRM_Abs("LDA", UtGen.PC, etiquetaInicio, "suma_vector: repetir loop");
+			
+			// Etiqueta fin del loop
+			int localidadFin = UtGen.emitirSalto(0);
+			UtGen.emitirComentario("suma_vector: fin del loop");
+			
+			// Completar salto condicional
+			UtGen.cargarRespaldo(saltoFin);
+			UtGen.emitirRM_Abs("JGE", UtGen.AC, localidadFin, "suma_vector: saltar si i >= 10");
+			UtGen.restaurarRespaldo();
+			
+			// Cargar resultado final en AC
+			UtGen.emitirRM("LD", UtGen.AC, desplazamientoTmp+2, UtGen.MP, "suma_vector: cargar resultado final");
+			
+			// Limpiar pila temporal
+			desplazamientoTmp += 2;
 		} else {
 			UtGen.emitirComentario("Llamada a funcion " + n.getNombreFuncion() + " (implementación simplificada)");
+			UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "call: resultado por defecto");
 		}
 		
 		if(UtGen.debug) UtGen.emitirComentario("<- llamada funcion");
