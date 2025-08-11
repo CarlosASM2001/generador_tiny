@@ -15,7 +15,8 @@ begin
     
     // Inicialización del vector con valores
     for i := 0 to 9 step 1
-        arr[i] := i * 2 + 1
+        arr[i] := i * 2 + 1;
+        write arr[i]  // Verificar que valores se están cargando
     end;
     
     // Prueba de operadores relacionales y matemáticos
