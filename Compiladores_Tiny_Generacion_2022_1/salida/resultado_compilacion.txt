@@ -258,7 +258,7 @@ token ID
 token SEMI
 token VAR
 	 error en sentencia
-Error sintáctico en sentencia
+Error sintÃ¡ctico en sentencia
 	 secuencia sentencias sin punto y coma
 	 declaracion variable local
 	 secuencia sentencias sin punto y coma
@@ -382,7 +382,7 @@ Variable: i -> Direccion: 11
 4:      ST        0,0(5)        global: almacenar en direccion 0
 * <- declaracion
 * -> declaracion: arr
-* Declaracion de array: arr tamaño definido
+* Declaracion de array: arr tamaÃ±o definido
 * -> constante
 5:      LDC       0,10(0)       cargar constante: 10
 * <- constante
@@ -600,7 +600,7 @@ Variable: i -> Direccion: 11
 127:    LDC       0,2(0)        cargar constante: 2
 * <- constante
 128:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
-* potencia: implementación simplificada base^exponente
+* potencia: implementaciÃ³n simplificada base^exponente
 129:    MUL       0,1,1         potencia: base * base (para x^2)
 * <- Operacion: potencia
 130:    ST        0,0(5)        asignacion: almaceno el valor para el id x
@@ -636,7 +636,7 @@ Variable: i -> Direccion: 11
 140:    LDC       0,10(0)       cargar constante: 10
 * <- constante
 141:    ST        0,-2(6)       call: guardar argumento
-* Implementación simplificada para suma_vector
+* ImplementaciÃ³n simplificada para suma_vector
 142:    LDC       0,45(0)       call: resultado simulado suma_vector (suma de i*2+1 para i=0..9)
 * <- llamada funcion
 143:    ST        0,13(5)       asignacion: almaceno el valor para el id resultado

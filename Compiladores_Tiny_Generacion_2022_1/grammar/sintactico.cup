@@ -125,9 +125,28 @@ precedence left TIMES, OVER, MOD;
 precedence right POW;
 
 // Regla principal del programa
-program ::= declaration_seq:d main:m 
+program ::= declaration_seq:d main:m declaration_seq:f
+           {: if(debug) System.out.println("\t regla programa completo con funciones"); 
+              // Concatenar las declaraciones antes y después del main
+              NodoBase allDeclarations = d;
+              if(allDeclarations != null && f != null){
+                  NodoBase current = allDeclarations;
+                  while(current.TieneHermano()){
+                      current = current.getHermanoDerecha();
+                  }
+                  current.setHermanoDerecha(f);
+              } else if(f != null){
+                  allDeclarations = f;
+              }
+              ast = new NodoPrograma(allDeclarations, m);
+           :}
+         | declaration_seq:d main:m 
            {: if(debug) System.out.println("\t regla programa completo"); 
               ast = new NodoPrograma(d, m);
+           :}
+         | main:m declaration_seq:f
+           {: if(debug) System.out.println("\t regla programa main con funciones"); 
+              ast = new NodoPrograma(f, m);
            :}
          | main:m 
            {: if(debug) System.out.println("\t regla programa solo main"); 
@@ -281,6 +300,11 @@ stmt ::= if_stmt:s {:RESULT=s;:}
        | break_stmt:s {:RESULT=s;:}
        | continue_stmt:s {:RESULT=s;:}
        | var_declaration:s {:RESULT=s;:}
+       | error SEMI
+         {: if(debug) System.out.println("\t error en sentencia con punto y coma"); 
+            System.out.println("Error sintáctico en sentencia, recuperando");
+            RESULT = null;
+         :}
        | error
          {: if(debug) System.out.println("\t error en sentencia"); 
             System.out.println("Error sintáctico en sentencia");
