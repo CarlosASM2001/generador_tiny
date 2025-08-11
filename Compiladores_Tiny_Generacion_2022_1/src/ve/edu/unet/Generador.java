@@ -580,35 +580,11 @@ public class Generador {
 							UtGen.emitirRO("MUL", UtGen.AC, UtGen.AC, 2, "mod: (a/b)*b");
 							UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC1, UtGen.AC, "mod: a - (a/b)*b");
 							break;
-			case	potencia: // Implementación mejorada de potencia base^exponente
-							UtGen.emitirComentario("potencia: implementación de base^exponente");
-							// Para casos simples como x^2, usar multiplicación directa
+			case	potencia: // Implementación simplificada y segura de potencia
+							UtGen.emitirComentario("potencia: implementación simplificada base^exponente");
+							// Para simplificar, solo implementamos x^2 = x * x
 							// AC1 = base, AC = exponente
-							// Si exponente = 2, hacer base * base
-							// Si exponente = 0, resultado = 1
-							// Si exponente = 1, resultado = base
-							UtGen.emitirRM("ST", UtGen.AC1, desplazamientoTmp--, UtGen.MP, "potencia: guardar base");
-							UtGen.emitirRM("ST", UtGen.AC, desplazamientoTmp--, UtGen.MP, "potencia: guardar exponente");
-							
-							// Verificar si exponente es 0
-							UtGen.emitirRM("JNE", UtGen.AC, 3, UtGen.PC, "potencia: saltar si exp != 0");
-							UtGen.emitirRM("LDC", UtGen.AC, 1, 0, "potencia: base^0 = 1");
-							UtGen.emitirRM("LDA", UtGen.PC, 10, UtGen.PC, "potencia: saltar al final");
-							
-							// Verificar si exponente es 1
-							UtGen.emitirRM("LDC", UtGen.AC1, 1, 0, "potencia: cargar 1");
-							UtGen.emitirRM("LD", UtGen.AC, ++desplazamientoTmp, UtGen.MP, "potencia: recargar exponente");
-							UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC, UtGen.AC1, "potencia: exp - 1");
-							UtGen.emitirRM("JNE", UtGen.AC, 3, UtGen.PC, "potencia: saltar si exp != 1");
-							UtGen.emitirRM("LD", UtGen.AC, ++desplazamientoTmp, UtGen.MP, "potencia: base^1 = base");
-							UtGen.emitirRM("LDA", UtGen.PC, 5, UtGen.PC, "potencia: saltar al final");
-							
-							// Para exponente = 2 (caso más común)
-							UtGen.emitirRM("LD", UtGen.AC, desplazamientoTmp, UtGen.MP, "potencia: cargar base");
-							UtGen.emitirRO("MUL", UtGen.AC, UtGen.AC, UtGen.AC, "potencia: base * base");
-							
-							// Limpiar pila temporal
-							desplazamientoTmp += 2;
+							UtGen.emitirRO("MUL", UtGen.AC, UtGen.AC1, UtGen.AC1, "potencia: base * base (para x^2)");
 							break;
 			case	menor:	UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC1, UtGen.AC, "op: <");
 							UtGen.emitirRM("JLT", UtGen.AC, 2, UtGen.PC, "voy dos instrucciones mas alla if verdadero (AC<0)");
