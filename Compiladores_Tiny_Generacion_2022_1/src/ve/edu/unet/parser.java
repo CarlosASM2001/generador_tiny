@@ -594,6 +594,14 @@ Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols
 		ts.ImprimirClaves();
 		Generador.setTablaSimbolos(ts);
 		Generador.generarCodigoObjeto(root);
+		
+		// Generar también archivo .tm
+		try {
+			String nombreArchivo = "ejemplo_generado/programa_extendido.tm";
+			Generador.generarCodigoObjetoAArchivo(root, nombreArchivo);
+		} catch (Exception e) {
+			System.out.println("Error al generar archivo .tm: " + e.getMessage());
+		}
 	}
 
 

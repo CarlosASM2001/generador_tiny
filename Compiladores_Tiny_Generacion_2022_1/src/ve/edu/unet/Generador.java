@@ -33,7 +33,7 @@ public class Generador {
 	 * y las llamadas a la funcion emitirRM corresponden a una inserccion 
 	 * y extraccion de esta pila
 	 */
-	private static int desplazamientoTmp = 0;
+	private static int desplazamientoTmp = -1;
 	private static TablaSimbolos tablaSimbolos = null;
 	
 	// Variables para manejo de funciones
@@ -658,16 +658,19 @@ public class Generador {
 		/*Genero inicializaciones del preludio estandar*/
 		/*Todos los registros en tiny comienzan en cero*/
 		UtGen.emitirComentario("Preludio estandar:");
-		UtGen.emitirRM("LD", UtGen.MP, 0, UtGen.AC, "cargar la maxima direccion desde la localidad 0");
-		UtGen.emitirRM("ST", UtGen.AC, 0, UtGen.AC, "limpio el registro de la localidad 0");
 		
-		// Configurar el Global Pointer (GP) para que apunte al inicio del área de variables globales
+		// Inicializar MP (registro 6) con una dirección válida en la parte alta de la memoria
+		// Usamos 1000 como base de la pila para estar dentro del rango 0-1023
+		UtGen.emitirRM("LDC", UtGen.MP, 1000, 0, "inicializar MP con direccion base de pila (1000)");
+		
+		// Configurar el Global Pointer (GP) para que apunte al inicio del área de variables globales  
 		UtGen.emitirRM("LDC", UtGen.GP, 0, 0, "GP apunta al inicio de variables globales (direccion 0)");
 		
 		// Información sobre el uso de memoria
 		if(tablaSimbolos != null){
 			int totalMemoria = tablaSimbolos.getTotalMemoriaUtilizada();
 			UtGen.emitirComentario("Total de memoria reservada para variables: " + totalMemoria + " posiciones");
+			UtGen.emitirComentario("Pila temporal inicia en direccion: 1000");
 		}
 	}
 }
