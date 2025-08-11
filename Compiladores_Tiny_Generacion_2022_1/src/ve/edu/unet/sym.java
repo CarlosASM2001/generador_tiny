@@ -26,15 +26,15 @@ public class sym {
   public static final int AND = 35;
   public static final int LT = 24;
   public static final int OR = 36;
-  public static final int COMMA = 45;
+  public static final int COMMA = 43;
   public static final int CALL = 12;
   public static final int BEGIN = 13;
   public static final int UNTIL = 7;
-  public static final int NUM = 48;
+  public static final int NUM = 46;
   public static final int PLUS = 25;
   public static final int ASSIGN = 22;
   public static final int IF = 2;
-  public static final int ID = 47;
+  public static final int ID = 45;
   public static final int LE = 30;
   public static final int EOF = 0;
   public static final int RETURN = 11;
@@ -44,18 +44,16 @@ public class sym {
   public static final int GLOBAL = 15;
   public static final int BREAK = 20;
   public static final int EQ = 23;
-  public static final int REAL = 49;
+  public static final int REAL = 47;
   public static final int TIMES = 27;
-  public static final int COLON = 46;
-  public static final int LBRACE = 43;
+  public static final int COLON = 44;
   public static final int ELSE = 4;
   public static final int READ = 8;
   public static final int TO = 18;
-  public static final int RBRACE = 44;
   public static final int THEN = 3;
   public static final int NE = 32;
   public static final int END = 5;
-  public static final int STRING = 50;
+  public static final int STRING = 48;
   public static final int GT = 29;
   public static final int VAR = 14;
   public static final int STEP = 19;
@@ -103,8 +101,6 @@ public class sym {
   "SEMI",
   "LBRACKET",
   "RBRACKET",
-  "LBRACE",
-  "RBRACE",
   "COMMA",
   "COLON",
   "ID",

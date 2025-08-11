@@ -100,8 +100,6 @@ public class PruebaLexico {
             // Nuevos delimitadores
             case sym.LBRACKET: return "LBRACKET";
             case sym.RBRACKET: return "RBRACKET";
-            case sym.LBRACE: return "LBRACE";
-            case sym.RBRACE: return "RBRACE";
             case sym.COMMA: return "COMMA";
             case sym.COLON: return "COLON";
             

@@ -198,12 +198,7 @@ espacio		    = [ \t]+
 "]"             {	if(debug) System.out.println("token RBRACKET");
 			return sf.newSymbol("RBRACKET",sym.RBRACKET);
 			}
-"{"             {	if(debug) System.out.println("token LBRACE");
-			return sf.newSymbol("LBRACE",sym.LBRACE);
-			}
-"}"             {	if(debug) System.out.println("token RBRACE");
-			return sf.newSymbol("RBRACE",sym.RBRACE);
-			}
+
 ","             {	if(debug) System.out.println("token COMMA");
 			return sf.newSymbol("COMMA",sym.COMMA);
 			}
