@@ -281,7 +281,7 @@ public class Generador {
 		UtGen.emitirRO("ADD", UtGen.AC, UtGen.AC1, UtGen.AC, "for: incrementar variable");
 		UtGen.emitirRM("ST", UtGen.AC, direccionVar, UtGen.GP, "for: guardar variable incrementada");
 		
-		// Salto al inicio del bucle
+		// Salto al inicio del bucle  
 		UtGen.emitirRM_Abs("LDA", UtGen.PC, localidadInicio, "for: salto al inicio");
 		
 		// Etiqueta de fin del bucle
@@ -541,7 +541,8 @@ public class Generador {
 			generar(n.getOpDerecho());
 			UtGen.emitirRM("JEQ", UtGen.AC, 2, UtGen.PC, "not: saltar si es cero (falso)");
 			UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "not: resultado falso");
-			UtGen.emitirRM("LDA", UtGen.PC, 1, UtGen.PC, "not: saltar carga de verdadero");
+			UtGen.emitirRM("LDC", 2, 0, 0, "not: cargar 0 en registro 2");
+			UtGen.emitirRM("JEQ", 2, 1, UtGen.PC, "not: salto incondicional");
 			UtGen.emitirRM("LDC", UtGen.AC, 1, 0, "not: resultado verdadero");
 			if(UtGen.debug)	UtGen.emitirComentario("<- Operacion: " + n.getOperacion());
 			return;
@@ -589,51 +590,59 @@ public class Generador {
 			case	menor:	UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC1, UtGen.AC, "op: <");
 							UtGen.emitirRM("JLT", UtGen.AC, 2, UtGen.PC, "voy dos instrucciones mas alla if verdadero (AC<0)");
 							UtGen.emitirRM("LDC", UtGen.AC, 0, UtGen.AC, "caso de falso (AC=0)");
-							UtGen.emitirRM("LDA", UtGen.PC, 1, UtGen.PC, "Salto incodicional a direccion: PC+1 (es falso evito colocarlo verdadero)");
+							UtGen.emitirRM("LDC", 2, 0, 0, "cargar 0 en registro 2");
+							UtGen.emitirRM("JEQ", 2, 1, UtGen.PC, "salto incondicional");
 							UtGen.emitirRM("LDC", UtGen.AC, 1, UtGen.AC, "caso de verdadero (AC=1)");
 							break;
 			case	menorigual:	UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC1, UtGen.AC, "op: <=");
 							UtGen.emitirRM("JLE", UtGen.AC, 2, UtGen.PC, "saltar si AC<=0");
 							UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "caso falso");
-							UtGen.emitirRM("LDA", UtGen.PC, 1, UtGen.PC, "saltar caso verdadero");
+							UtGen.emitirRM("LDC", 2, 0, 0, "cargar 0 en registro 2");
+							UtGen.emitirRM("JEQ", 2, 1, UtGen.PC, "salto incondicional");
 							UtGen.emitirRM("LDC", UtGen.AC, 1, 0, "caso verdadero");
 							break;
 			case	mayor:	UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC1, UtGen.AC, "op: >");
 							UtGen.emitirRM("JGT", UtGen.AC, 2, UtGen.PC, "saltar si AC>0");
 							UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "caso falso");
-							UtGen.emitirRM("LDA", UtGen.PC, 1, UtGen.PC, "saltar caso verdadero");
+							UtGen.emitirRM("LDC", 2, 0, 0, "cargar 0 en registro 2");
+							UtGen.emitirRM("JEQ", 2, 1, UtGen.PC, "salto incondicional");
 							UtGen.emitirRM("LDC", UtGen.AC, 1, 0, "caso verdadero");
 							break;
 			case	mayorigual:	UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC1, UtGen.AC, "op: >=");
 							UtGen.emitirRM("JGE", UtGen.AC, 2, UtGen.PC, "saltar si AC>=0");
 							UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "caso falso");
-							UtGen.emitirRM("LDA", UtGen.PC, 1, UtGen.PC, "saltar caso verdadero");
+							UtGen.emitirRM("LDC", 2, 0, 0, "cargar 0 en registro 2");
+							UtGen.emitirRM("JEQ", 2, 1, UtGen.PC, "salto incondicional");
 							UtGen.emitirRM("LDC", UtGen.AC, 1, 0, "caso verdadero");
 							break;
 			case	igual:	UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC1, UtGen.AC, "op: ==");
 							UtGen.emitirRM("JEQ", UtGen.AC, 2, UtGen.PC, "voy dos instrucciones mas alla if verdadero (AC==0)");
 							UtGen.emitirRM("LDC", UtGen.AC, 0, UtGen.AC, "caso de falso (AC=0)");
-							UtGen.emitirRM("LDA", UtGen.PC, 1, UtGen.PC, "Salto incodicional a direccion: PC+1 (es falso evito colocarlo verdadero)");
+							UtGen.emitirRM("LDC", 2, 0, 0, "cargar 0 en registro 2");
+							UtGen.emitirRM("JEQ", 2, 1, UtGen.PC, "salto incondicional");
 							UtGen.emitirRM("LDC", UtGen.AC, 1, UtGen.AC, "caso de verdadero (AC=1)");
 							break;
 			case	diferente:	UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC1, UtGen.AC, "op: !=");
 							UtGen.emitirRM("JNE", UtGen.AC, 2, UtGen.PC, "saltar si AC!=0");
 							UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "caso falso");
-							UtGen.emitirRM("LDA", UtGen.PC, 1, UtGen.PC, "saltar caso verdadero");
+							UtGen.emitirRM("LDC", 2, 0, 0, "cargar 0 en registro 2");
+							UtGen.emitirRM("JEQ", 2, 1, UtGen.PC, "salto incondicional");
 							UtGen.emitirRM("LDC", UtGen.AC, 1, 0, "caso verdadero");
 							break;
 			case	and:	// Evaluación de cortocircuito
 							UtGen.emitirRM("JEQ", UtGen.AC1, 3, UtGen.PC, "and: si izquierdo es falso, resultado es falso");
 							UtGen.emitirRM("JEQ", UtGen.AC, 2, UtGen.PC, "and: si derecho es falso, resultado es falso");
 							UtGen.emitirRM("LDC", UtGen.AC, 1, 0, "and: ambos verdaderos");
-							UtGen.emitirRM("LDA", UtGen.PC, 1, UtGen.PC, "and: saltar caso falso");
+							UtGen.emitirRM("LDC", 2, 0, 0, "cargar 0 en registro 2");
+							UtGen.emitirRM("JEQ", 2, 1, UtGen.PC, "and: salto incondicional");
 							UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "and: resultado falso");
 							break;
 			case	or:		// Evaluación de cortocircuito
 							UtGen.emitirRM("JNE", UtGen.AC1, 3, UtGen.PC, "or: si izquierdo es verdadero, resultado es verdadero");
 							UtGen.emitirRM("JNE", UtGen.AC, 2, UtGen.PC, "or: si derecho es verdadero, resultado es verdadero");
 							UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "or: ambos falsos");
-							UtGen.emitirRM("LDA", UtGen.PC, 1, UtGen.PC, "or: saltar caso verdadero");
+							UtGen.emitirRM("LDC", 2, 0, 0, "cargar 0 en registro 2");
+							UtGen.emitirRM("JEQ", 2, 1, UtGen.PC, "or: salto incondicional");
 							UtGen.emitirRM("LDC", UtGen.AC, 1, 0, "or: resultado verdadero");
 							break;
 			default:
