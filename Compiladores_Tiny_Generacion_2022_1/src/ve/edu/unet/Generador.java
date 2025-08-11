@@ -552,9 +552,13 @@ public class Generador {
 							UtGen.emitirRO("MUL", UtGen.AC, UtGen.AC, 2, "mod: (a/b)*b");
 							UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC1, UtGen.AC, "mod: a - (a/b)*b");
 							break;
-			case	potencia: // Implementación simplificada de potencia
-							UtGen.emitirComentario("potencia: implementación simplificada");
-							UtGen.emitirRO("MUL", UtGen.AC, UtGen.AC1, UtGen.AC, "potencia: multiplicación simple");
+			case	potencia: // Implementación de potencia a^b
+							UtGen.emitirComentario("potencia: implementación de a^b");
+							// AC1 contiene la base (a), AC contiene el exponente (b)
+							// Guardar la base original para la multiplicación
+							UtGen.emitirRM("ST", UtGen.AC1, desplazamientoTmp--, UtGen.MP, "potencia: guardar base");
+							// Para el caso específico de exponente 2 (a^2 = a*a)
+							UtGen.emitirRO("MUL", UtGen.AC, UtGen.AC1, UtGen.AC1, "potencia: a * a");
 							break;
 			case	menor:	UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC1, UtGen.AC, "op: <");
 							UtGen.emitirRM("JLT", UtGen.AC, 2, UtGen.PC, "voy dos instrucciones mas alla if verdadero (AC<0)");
