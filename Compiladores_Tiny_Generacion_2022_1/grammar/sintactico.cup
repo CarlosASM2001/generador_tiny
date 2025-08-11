@@ -77,7 +77,7 @@ terminal MOD, POW;
 terminal AND, OR, NOT;
 
 // Delimitadores
-terminal LPAREN, RPAREN, SEMI, LBRACKET, RBRACKET, LBRACE, RBRACE, COMMA, COLON;
+terminal LPAREN, RPAREN, SEMI, LBRACKET, RBRACKET, COMMA, COLON;
 
 // Tipos de datos
 terminal String ID, NUM, REAL, STRING;
@@ -88,9 +88,7 @@ non terminal NodoBase declaration_seq;
 non terminal NodoBase declaration;
 non terminal NodoBase global_declaration;
 non terminal NodoBase var_declaration;
-non terminal NodoBase array_declaration;
 non terminal NodoBase function_declaration;
-non terminal NodoBase function_seq;
 non terminal NodoBase parameter_list;
 non terminal NodoBase parameter;
 non terminal NodoBase main;
@@ -113,7 +111,6 @@ non terminal NodoBase simple_exp;
 non terminal NodoBase term;
 non terminal NodoBase factor;
 non terminal NodoBase argument_list;
-non terminal NodoBase block;
 
 /* Precedencia de operadores */
 precedence left OR;
@@ -237,16 +234,7 @@ main ::= BEGIN stmt_seq:s END
         :}
 ;
 
-// Bloque de código (puede ser BEGIN...END o una sola sentencia)
-block ::= BEGIN stmt_seq:s END
-         {: if(debug) System.out.println("\t bloque begin-end"); 
-            RESULT = s;
-         :}
-       | stmt:s
-         {: if(debug) System.out.println("\t bloque sentencia unica"); 
-            RESULT = s;
-         :}
-;
+
 
 // Declaración de variable local
 var_declaration ::= VAR ID:var SEMI
@@ -300,11 +288,6 @@ stmt ::= if_stmt:s {:RESULT=s;:}
        | break_stmt:s {:RESULT=s;:}
        | continue_stmt:s {:RESULT=s;:}
        | var_declaration:s {:RESULT=s;:}
-       | error SEMI
-         {: if(debug) System.out.println("\t error en sentencia con punto y coma"); 
-            System.out.println("Error sintáctico en sentencia, recuperando");
-            RESULT = null;
-         :}
        | error
          {: if(debug) System.out.println("\t error en sentencia"); 
             System.out.println("Error sintáctico en sentencia");
