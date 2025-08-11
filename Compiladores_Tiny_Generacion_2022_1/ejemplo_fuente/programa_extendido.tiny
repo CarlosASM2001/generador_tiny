@@ -11,7 +11,6 @@ begin
     var resultado;
     
     // Lectura de datos
-    write "Ingrese un número: ";
     read num;
     
     // Inicialización del vector con valores
@@ -21,36 +20,33 @@ begin
     
     // Prueba de operadores relacionales y matemáticos
     if num >= 0 && num <= 10 then
-        write "El número está en rango";
         write num;
         
         // Operaciones matemáticas adicionales
         if num % 2 = 0 then
-            write "El número es par"
+            write 1
         else
-            write "El número es impar"
+            write 0
         end;
         
         // Prueba de potenciación
         x := num ** 2;
-        write "El cuadrado es: ";
         write x
     else
-        write "Número fuera de rango"
+        write 999
     end;
     
     // Prueba de la función suma_vector
     resultado := call suma_vector(arr, 10);
-    write "La suma del vector es: ";
     write resultado;
     
     // Prueba de operadores lógicos
     if (num > 5) || (num < 0) then
-        write "Condición compleja verdadera"
+        write 1
     end;
     
     if !(num != 5) then
-        write "El número es 5"
+        write 5
     end
 end
 
